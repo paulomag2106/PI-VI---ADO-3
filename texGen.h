@@ -16,6 +16,5 @@ typedef struct t_weightV2 {
     float weight;
 } weightV2;
 
-void genWeightedBlueNoise(weightV2 *array, float radius, int size, int k);
-void genVoronoiMap(int width, uint32_t *tex, float radius);
+void genVoronoiMap(int width, uint32_t *tex, float radius, float variation); // variation 0 to 1
 void genVoronoiTex(int width, int numPoints, uint32_t *tex, distenum distType);

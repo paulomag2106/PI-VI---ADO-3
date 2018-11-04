@@ -416,13 +416,13 @@ void pushObject(object *newObject) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glBindTexture(GL_TEXTURE_2D, 0);
     } else {
-        // uint32_t width = 256;
-        // uint32_t *tex = malloc(sizeof(uint32_t)*width*width);
-        // genVoronoiMap(width, tex, 20);
-        uint32_t texcolor = 0xffffffff;
+        uint32_t width = 256;
+        uint32_t *tex = malloc(sizeof(uint32_t)*width*width);
+        genVoronoiMap(width, tex, width/16, 1);
+        // uint32_t texcolor = 0xffffffff;
         glGenTextures(1, &newObject->vbo[4]);
         glBindTexture(GL_TEXTURE_2D, (GLuint)newObject->vbo[4]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texcolor);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, width, 0, GL_BGRA, GL_UNSIGNED_BYTE, tex);
         //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, newObject->tex.width, newObject->tex.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, newObject->tex.buffer);
         // NOTE: Must pass texture from RGBA to BGRA so R G and B are read in this order
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
