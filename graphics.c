@@ -416,7 +416,7 @@ void pushObject(object *newObject) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glBindTexture(GL_TEXTURE_2D, 0);
     } else {
-        uint32_t width = 256;
+        uint32_t width = 1024;
         uint32_t *tex = malloc(sizeof(uint32_t)*width*width);
         genVoronoiMap(width, tex, width/16, 1);
         // uint32_t texcolor = 0xffffffff;

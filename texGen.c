@@ -4,7 +4,7 @@
 void genVoronoiMap(int width, uint32_t *tex, float radius, float variation) {
 
 	int numPoints = (int)((width/radius) * (width/radius));
-	printf("NUM POINTS: %d\n", numPoints);
+	// printf("NUM POINTS: %d\n", numPoints);
 
 	weightV2 points[numPoints];
 	// genWeightedBlueNoise(points, radius, width);
@@ -12,7 +12,7 @@ void genVoronoiMap(int width, uint32_t *tex, float radius, float variation) {
 	for(int i = 0; i < (int)(width/radius); ++i) {
 		for(int j = 0; j < (int)(width/radius); ++j) {
 			int index = j + i*(int)(width/radius);
-			printf("Index: %d\n", index);
+			// printf("Index: %d\n", index);
 			points[index].x = (frand(variation*radius) -
 							   variation*radius/4) + i*radius +
 							   radius/2;
@@ -20,7 +20,7 @@ void genVoronoiMap(int width, uint32_t *tex, float radius, float variation) {
 							   variation*radius/4) + j*radius +
 							   radius/2;
 			points[index].weight = frand(1.f);
-			printf("point[%d]:(%d,%d)\n", index, points[index].x, points[index].y);
+			// printf("point[%d]:(%d,%d)\n", index, points[index].x, points[index].y);
 		}
 	}
 
@@ -42,14 +42,17 @@ void genVoronoiMap(int width, uint32_t *tex, float radius, float variation) {
 
             }
 
-			// printf("passou daqui! Indice %d\n", index);
+            // tex[index] = dist < 2 ? 0xffff0000 :
+			// 			 0xff << 24 |
+			// 			 (int)(points[nextClosest].weight * 0xff) << 16 |
+			// 			 (int)(points[nextClosest].weight * 0xff) << 8 |
+			// 			 (int)(points[nextClosest].weight * 0xff);
 
-            tex[index] = dist < 2 ? 0xffff0000 :
-						 0xff << 24 |
-						 (int)(points[nextClosest].weight * 0xff) << 16 |
-						 (int)(points[nextClosest].weight * 0xff) << 8 |
-						 (int)(points[nextClosest].weight * 0xff);
-            // tex[index] = points[nextClosest].;
+			// tex[index] = dist < 2 ? 0xffff0000 :
+ 			// 			 0xff << 24 |
+ 			// 			 (int)((points[nextClosest].weight) * 0xff) << 8;
+			tex[index] = 0xff << 24 |
+ 						 (int)((points[nextClosest].weight) * 0xff) << 8;
 
         }
     }
