@@ -25,8 +25,6 @@ GLuint loadShaders(const char *vertex_file_name, const char *fragment_file_name)
     glShaderSource(VertexShaderID, 1, (const char *const *)&vertexShaderContent, NULL);
     glCompileShader(VertexShaderID);
 
-    // printf("\n\n#VERTEX SHADER:\n\n%s\n\n", vertexShaderContent);
-
     // Read Fragment Shader file
     size_t fragment_file_size;
     fseek(fragmentFile, 0, SEEK_END);
@@ -39,9 +37,7 @@ GLuint loadShaders(const char *vertex_file_name, const char *fragment_file_name)
     printf("Compiling shader : %s\n", fragment_file_name);
     glShaderSource(FragmentShaderID, 1, (const char *const *)&fragmentShaderContent, NULL);
     glCompileShader(FragmentShaderID);
-
-    // printf("#FRAGMENT SHADER:\n\n%s\n\n", fragmentShaderContent);
-
+    
     // Check vertex shader
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &result);
     glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
@@ -369,16 +365,6 @@ void pushObject(object *newObject) {
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
-    // Generate, bind and attribute colors
-//    if(newObject->vboSize[3] > 0) {
-//        glGenBuffers(1, &newObject->vbo[3]);
-//        glBindBuffer(GL_ARRAY_BUFFER, newObject->vbo[3]);
-//        glBufferData(GL_ARRAY_BUFFER, newObject->vboSize[3], newObject->colors, newObject->usage);
-//        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
-//    }
-
-
-
     // Generate, bind and attribute position
     newObject->position = (v3){0,0,0};
     newObject->uniform[0] = glGetUniformLocation(programID, "pos");
@@ -396,21 +382,11 @@ void pushObject(object *newObject) {
 
     newObject->uniform[3] = glGetUniformLocation(programID, "color");
     glUniform3fv(newObject->uniform[3],1,(GLfloat *)&newObject->color);
-    //Generate a voronoi Texture
-//    int width = 512;
-//
-//    newObject->tex = malloc(sizeof(objtexture));
-//    newObject->tex->buffer = (uint32_t *)malloc(width*width*sizeof(uint32_t));
-//    newObject->tex->height = width;
-//    newObject->tex->width = width;
-//    genVoronoiCellTex(width, 16, newObject->tex->buffer, EUCLIDEAN);
 
-    //unsigned char *array;
     if(newObject->tex) {
         glGenTextures(1, &newObject->vbo[4]);
         glBindTexture(GL_TEXTURE_2D, (GLuint)newObject->vbo[4]);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, newObject->tex->width, newObject->tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, newObject->tex->buffer);
-        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, newObject->tex.width, newObject->tex.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, newObject->tex.buffer);
         // NOTE: Must pass texture from RGBA to BGRA so R G and B are read in this order
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -419,7 +395,6 @@ void pushObject(object *newObject) {
         uint32_t width = 1024;
         uint32_t *tex = malloc(sizeof(uint32_t)*width*width);
         genVoronoiMap(width, tex, width/16, 1);
-        // uint32_t texcolor = 0xffffffff;
         glGenTextures(1, &newObject->vbo[4]);
         glBindTexture(GL_TEXTURE_2D, (GLuint)newObject->vbo[4]);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, width, 0, GL_BGRA, GL_UNSIGNED_BYTE, tex);
@@ -450,7 +425,6 @@ void freeObject(object *toFree) {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
-    //glDisableVertexAttribArray(3);
     free(toFree->vertices);
     free(toFree->normals);
     free(toFree->uvs);

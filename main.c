@@ -9,10 +9,6 @@ int main() {
     zoom = WIDTH/10 + 50;
     v3 camerapos = {0,0,zoom};
 
-    // weightV2 *points = malloc(sizeof(weightV2));
-    // genWeightedBlueNoise(points, 30, 512, 20);
-    // free(points);
-
     width = WIDTH;
     height = HEIGHT;
 
@@ -48,9 +44,6 @@ int main() {
         glfwTerminate();
         return -1;
     }
-
-    // Set glfwInputMode
-    //glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     // Set Clear color
     glClearColor(0.153f, 0.067f, 0.200f, 0.f);
