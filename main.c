@@ -88,9 +88,21 @@ int main() {
     glfwSetCursorPosCallback(window, (void *)cursor_position_callback);
     glfwSetScrollCallback(window, (void *)scroll_callback);
 
+    
+    uint32_t twidth = 1024;
+    objtexture tex;
+    tex.buffer = (uint32_t *) malloc(sizeof(uint32_t)*twidth*twidth);
+    tex.width = twidth;
+    tex.height = twidth;
+    tex.bufferSize = twidth * twidth;
+    
+    genVoronoiMap(twidth, tex.buffer, twidth/16, 1);
+    
     // Create Map
     object map = makeShapeObject(RECT, (v3){WIDTH/20, WIDTH/20, 0.f}, (v3){1.f,1.f,1.f}, NULL,
                                  GL_STATIC_DRAW, 0);
+    updateTexture(&map, &tex);
+    object lobo = makeShapeObject(ELLIPSOID_2D, newV3(1, 1, 0.1), newV3(1, 0, 0), NULL, GL_DYNAMIC_DRAW, 2);
 
     //////////////////////////////////////////////////////////////////////////////
     //                                MAIN LOOP                                 //
@@ -119,6 +131,7 @@ int main() {
 
         // Draw Objects
         drawObject(&map);
+        drawObject(&lobo);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -129,6 +142,7 @@ int main() {
 
     // Free objects
     freeObject(&map);
+    freeObject(&lobo);
 
     // Free textobjects
 
