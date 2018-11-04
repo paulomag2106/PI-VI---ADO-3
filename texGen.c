@@ -1,32 +1,28 @@
 #include "texGen.h"
 #include "float.h"
 
-void genVoronoiMap(int width, uint32_t *tex, float radius, float variation) {
+void genVoronoiMap(uint32_t *tex, float variation) {
 
-	int numPoints = (int)((width/radius) * (width/radius));
-
-	weightV2 points[numPoints];
-
-	for(int i = 0; i < (int)(width/radius); ++i) {
-		for(int j = 0; j < (int)(width/radius); ++j) {
-			int index = j + i*(int)(width/radius);
-			points[index].x = (frand(variation*radius) -
-							   variation*radius/4) + i*radius +
-							   radius/2;
-			points[index].y = (frand(variation*radius) -
-							   variation*radius/4) + j*radius +
-							   radius/2;
+	for(int i = 0; i < TWIDTH/RADIUS; ++i) {
+		for(int j = 0; j < TWIDTH/RADIUS; ++j) {
+			int index = j + i*(TWIDTH/RADIUS);
+			points[index].x = (frand(variation*RADIUS) -
+							   variation*RADIUS/4) + i*RADIUS +
+							   RADIUS/2;
+			points[index].y = (frand(variation*RADIUS) -
+							   variation*RADIUS/4) + j*RADIUS +
+							   RADIUS/2;
 			points[index].weight = frand(1.f);
 		}
 	}
 
-	for(int i = 0; i < width; ++i) {
-        for(int j = 0; j < width; ++j) {
-            int index = j + i*width;
+	for(int i = 0; i < TWIDTH; ++i) {
+        for(int j = 0; j < TWIDTH; ++j) {
+            int index = j + i*TWIDTH;
 
             uint32_t dist = UINT_MAX;
             int nextClosest = 0;
-            for(int k = 0; k < numPoints; k++) {
+            for(int k = 0; k < NUMPOINTS; k++) {
                 int dx = abs(j-points[k].x);
                 int dy = abs(i-points[k].y);
                 int newDist = intSqDist(dx, dy);
