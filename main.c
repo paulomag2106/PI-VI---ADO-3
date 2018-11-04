@@ -9,6 +9,10 @@ int main() {
     zoom = WIDTH/10 + 50;
     v3 camerapos = {0,0,zoom};
 
+    weightV2 *points = malloc(sizeof(weightV2));
+    genWeightedBlueNoise(points, 30, 512, 20);
+    free(points);
+
     width = WIDTH;
     height = HEIGHT;
 

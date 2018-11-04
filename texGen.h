@@ -12,9 +12,10 @@ typedef enum t_distenum {
 } distenum;
 
 typedef struct t_weightV2 {
-    uint32_t x,y;
+    int x,y;
     float weight;
 } weightV2;
 
-void genWeightedBlueNoise(weightV2 *array, v2i radius, v2i size);
+void genWeightedBlueNoise(weightV2 *array, float radius, int size, int k);
+void genVoronoiMap(int width, uint32_t *tex, float radius);
 void genVoronoiTex(int width, int numPoints, uint32_t *tex, distenum distType);
