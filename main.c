@@ -125,7 +125,7 @@ int main() {
         
         timepassed += deltaTime;
         
-        if(timepassed > 2.f) {
+        if(timepassed > 0.1f) {
             
             timepassed = 0.f;
             timePasses();
@@ -157,6 +157,7 @@ int main() {
 
     // Free objects
     freeObject(&map);
+    freeSites();
 
     // Free textobjects
 

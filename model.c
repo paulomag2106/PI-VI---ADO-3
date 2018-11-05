@@ -4,23 +4,36 @@ Site sites[NUMPOINTS];
 
 
 void setNearest(int site_index) {
-    
-    Site site = sites[site_index];
+
     
     int value = sqrt(NUMPOINTS);
     int near_index = 0;
     
+    int yStart = -1, xStart = -1, yEnd = 1, xEnd = 1;
     
-    for(int x = -1; x <= 1; x++) {
+    if(site_index % value == 0) {
+        //yStart = 0;
+        xStart = 0;
+    }
+    
+    else if((site_index + 1) % value == 0) {
+        xEnd = 0;
+        //yEnd = 0;
+    }
+    
+    for(int y = yStart; y <= yEnd; y++) {
         
-        for(int y = -1; y <= 1; y++) {
+        for(int x = xStart; x <= xEnd; x++) {
             
-            int index = x + (y * value);
+            int index = site_index + (x + (y * value));
             
-            if(index != site_index) site.nearest[near_index++] = index;
+            if (index < 0 || index >= NUMPOINTS) sites[site_index].nearest[near_index++] = -1;
+            else if(index != site_index) sites[site_index].nearest[near_index++] = index;
             
         }
     }
+    
+    printf("Site %d with nearests: %d %d %d %d %d %d %d %d\n", site_index, sites[site_index].nearest[0], sites[site_index].nearest[1], sites[site_index].nearest[2], sites[site_index].nearest[3], sites[site_index].nearest[4], sites[site_index].nearest[5], sites[site_index].nearest[6], sites[site_index].nearest[7]);
     
 }
 
@@ -36,8 +49,8 @@ void createInitialEnvironment() {
         
         sites[i].slopeAngle = points[i].weight;
         
-        float preyDensity = frand(1.f) * clamp(sites[i].slopeAngle, 0.2f, 1.f);
-        float wolfDensity = frand(1.f) * clamp((1.f - sites[i].slopeAngle), 0.2f, 1.f);
+        float preyDensity = frand(1.f) * clamp(sites[i].slopeAngle, 0.4f, 0.6f);
+        float wolfDensity = frand(1.f) * clamp((1.f - sites[i].slopeAngle), 0.3f, 0.8f);
         
         object preyObj = makeShapeObject(TRIANGLE, newV3(1, 1, 0), newV3(0, 0, 1), NULL, GL_DYNAMIC_DRAW, 0);
         object wolfObj = makeShapeObject(ELLIPSOID_2D, newV3(1, 1, 0), newV3(1, 0, 0), NULL, GL_DYNAMIC_DRAW, 2);
@@ -53,6 +66,9 @@ void createInitialEnvironment() {
         
         sites[i].nextSite = -1;
         
+        sites[i].nearest[7] = -1;
+        sites[i].nearest[6] = -1;
+        sites[i].nearest[5] = -1;
         setNearest(i);
     }
     
@@ -108,34 +124,35 @@ void timePasses() {
             sites[i].migrationRate = wolfMigration;
             sites[i].nextSite = nearest;
             
-            sites[i].prey.preyDensity += p * clamp(frand(0.05f), 0.01f, 0.05f);
+            sites[i].prey.preyDensity += (p) * clamp(frand(0.05f), 0.01f, 0.05f);
             sites[i].prey.preyDensity = clamp(sites[i].prey.preyDensity, 0.f, 1.f);
         }
         
         else {
             
-            float huntSuccessChance = 1.f - sites[i].slopeAngle;
+            float huntSuccessChance = 1.f - sites[i].slopeAngle * 0.5f;
             huntSuccessChance = clamp(huntSuccessChance, 0.1f, 0.9f);
             
             bool huntSuccessful = frand(1.f) <= huntSuccessChance;
             
             if(huntSuccessful) {
                 
-                float huntEffect = w * clamp(frand(0.15f), 0.05f, 0.15f);
+                float huntPreyEffect = w * clamp(frand(0.15f), 0.05f, 0.15f);
+                float huntWolfEffect = ((p + w)/2.f) * clamp(frand(0.15f), 0.05f, 0.15f);
                 
-                sites[i].prey.preyDensity -= huntEffect;
+                sites[i].prey.preyDensity -= huntPreyEffect;
                 sites[i].prey.preyDensity = clamp(sites[i].prey.preyDensity, 0.f, 1.f);
                 
-                sites[i].wolf.strength += huntEffect;
+                sites[i].wolf.strength += huntWolfEffect;
                 sites[i].wolf.strength = clamp(sites[i].wolf.strength, 0.f, 1.f);
                 
             }
             
             else {
                 
-                float noHuntEffect = clamp(frand(0.2f), 0.05f, 0.2f);
+                float noHuntEffect = clamp(frand(0.02f), 0.f, 0.02f);
                 
-                sites[i].prey.preyDensity += p * clamp(frand(0.05f), 0.01f, 0.05f);
+                sites[i].prey.preyDensity += (p) * clamp(frand(0.05f), 0.01f, 0.05f);
                 sites[i].prey.preyDensity = clamp(sites[i].prey.preyDensity, 0.f, 1.f);
                 
                 sites[i].wolf.strength -= noHuntEffect;
@@ -151,11 +168,15 @@ void timePasses() {
     for(int i = 0; i < NUMPOINTS; i++) {
         
         if(sites[i].nextSite >= 0) {
+            
+            int next = sites[i].nearest[sites[i].nextSite];
+            
+            //printf("Wolves of site %d will migrate to site %d\n", i,sites[i].nextSite);
         
-            sites[ sites[i].nextSite ].wolf.strength += sites[i].migrationRate;
+            sites[next].wolf.strength += sites[i].migrationRate;
             sites[i].wolf.strength -= sites[i].migrationRate;
             
-            sites[ sites[i].nextSite ].wolf.strength = clamp(sites[ sites[i].nextSite ].wolf.strength, 0.f, 1.f);
+            sites[next].wolf.strength = clamp(sites[next].wolf.strength, 0.f, 1.f);
             sites[i].wolf.strength = clamp(sites[i].wolf.strength, 0.f, 1.f);
             
             sites[i].nextSite = -1;
@@ -165,11 +186,18 @@ void timePasses() {
     
     for(int i = 0; i < NUMPOINTS; i++) {
         
-        float preyDensity = sites[i].prey.preyDensity;
-        float wolfDensity = sites[i].wolf.strength;
+        float preyDensity = (sites[i].prey.preyDensity) * 1.5;
+        float wolfDensity = (sites[i].wolf.strength) * 1.5;
+
+        if(preyDensity <= 0.0001f) preyDensity = 0.f;
+        else preyDensity += 0.5;
+        
+        if(wolfDensity <= 0.0001f) wolfDensity = 0.f;
+        else wolfDensity += 0.5;
+
     
-        scaleObjTo(&sites[i].prey.obj, newV3(2*preyDensity, 2*preyDensity, 0));
-        scaleObjTo(&sites[i].wolf.obj, newV3(2*wolfDensity, 2*wolfDensity, 0));
+        scaleObjTo(&sites[i].prey.obj, newV3(preyDensity, preyDensity, 0));
+        scaleObjTo(&sites[i].wolf.obj, newV3(wolfDensity, wolfDensity, 0));
     }
 }
 
@@ -185,5 +213,9 @@ void drawSites() {
 
 void freeSites() {
     
+    for(int i = 0; i < NUMPOINTS; i++) {
+        freeObject(&sites[i].prey.obj);
+        freeObject(&sites[i].wolf.obj);
+    }
 }
 

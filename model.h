@@ -21,11 +21,12 @@ typedef struct t_site {
     
     float x, y;
     float slopeAngle;
-    Wolf wolf;
-    Prey prey;
+    float migrationRate;
     int nearest[8];
     int nextSite;
-    float migrationRate;
+    Wolf wolf;
+    Prey prey;
+    
     
 } Site;
 
