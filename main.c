@@ -133,6 +133,8 @@ int main() {
         }
 
         // Zoom View Matrix
+        camerapos.x += xOffset;
+        camerapos.y += yOffset;
         camerapos.z = zoom;
         View = lookAt(camerapos,
                       (v3){camerapos.x,camerapos.y,0},(v3){0,1,0});
