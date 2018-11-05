@@ -37,7 +37,7 @@ GLuint loadShaders(const char *vertex_file_name, const char *fragment_file_name)
     printf("Compiling shader : %s\n", fragment_file_name);
     glShaderSource(FragmentShaderID, 1, (const char *const *)&fragmentShaderContent, NULL);
     glCompileShader(FragmentShaderID);
-    
+
     // Check vertex shader
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &result);
     glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
@@ -392,12 +392,12 @@ void pushObject(object *newObject) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glBindTexture(GL_TEXTURE_2D, 0);
     } else {
-        
         uint32_t color = 0xffffffff;
         
         glGenTextures(1, &newObject->vbo[4]);
         glBindTexture(GL_TEXTURE_2D, (GLuint)newObject->vbo[4]);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &color);
+
         //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, newObject->tex.width, newObject->tex.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, newObject->tex.buffer);
         // NOTE: Must pass texture from RGBA to BGRA so R G and B are read in this order
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

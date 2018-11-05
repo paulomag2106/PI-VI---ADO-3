@@ -89,14 +89,14 @@ int main() {
     glfwSetScrollCallback(window, (void *)scroll_callback);
 
     
-    uint32_t twidth = 1024;
+    uint32_t twidth = TWIDTH;
     objtexture tex;
     tex.buffer = (uint32_t *) malloc(sizeof(uint32_t)*twidth*twidth);
     tex.width = twidth;
     tex.height = twidth;
     tex.bufferSize = twidth * twidth;
     
-    genVoronoiMap(twidth, tex.buffer, twidth/16, 1);
+    genVoronoiMap(tex.buffer, 1);
     
     // Create Map
     object map = makeShapeObject(RECT, (v3){WIDTH/20, WIDTH/20, 0.f}, (v3){1.f,1.f,1.f}, NULL,
