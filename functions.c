@@ -260,10 +260,26 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     // int vertical = 0;
     // int horizontal = 0;
-    // bool d = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
-    // bool w = glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
-    // bool a = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
-    // bool s = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
+    bool d = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
+    bool w = glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
+    bool a = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
+    bool s = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
+
+    if(s) {
+        yOffset = lerp(yOffset, 0.25, -MAXSPD);
+    } else if(w) {
+        yOffset = lerp(yOffset, 0.25, MAXSPD);
+    } else {
+        yOffset = 0;
+    }
+
+    if(a) {
+        xOffset = lerp(xOffset, 0.25, -MAXSPD);
+    } else if(d) {
+        xOffset = lerp(xOffset, 0.25, MAXSPD);
+    } else {
+        xOffset = 0;
+    }
     //
     // if(key == GLFW_KEY_SPACE && action == GLFW_RELEASE) key_pressed[0] = true;
     // if(key == GLFW_KEY_Z && action == GLFW_RELEASE) key_pressed[1] = true;
@@ -285,32 +301,34 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void cursor_position_callback(GLFWwindow* window) {
 
-    bool leftClick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-    if(leftClick) {
+    // bool leftClick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+    // if(leftClick) {
+    //
+    //     int width, height;
+    //
+    //     glfwGetCursorPos(window, &mouseX, &mouseY);
+    //     glfwGetWindowSize(window, &width, &height);
+    //
+    //     double deltax = mouseX - oldx;
+    //     double deltay = mouseY - oldy;
+    //     // printf("Delta: (%f,%f)\n", deltax, deltay);
+    //
+    //     xOffset = deltax/20;
+    //     yOffset = deltay/20;
+    //     // printf("Offset: (%f,%f)\n", xOffset, yOffset);
+    //
+    //     oldx = mouseX;
+    //     oldy = mouseY;
+    //
+    // }
+    //
+    // // oldx = oldy = mouseX = mouseY = 0;
 
-        int width, height;
-
-        glfwGetCursorPos(window, &mouseX, &mouseY);
-        glfwGetWindowSize(window, &width, &height);
-
-        double deltax = mouseX - oldx;
-        double deltay = mouseY - oldy;
-        // printf("Delta: (%f,%f)\n", deltax, deltay);
-
-        xOffset = deltax/20;
-        yOffset = deltay/20;
-        // printf("Offset: (%f,%f)\n", xOffset, yOffset);
-
-        oldx = mouseX;
-        oldy = mouseY;
-
-    }
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     zoom += yoffset;
-    zoom = clamp(zoom, 5.f, WIDTH/10 +50);
-    // printf("Zoom: %f\n", zoom);
+    zoom = clamp(zoom, 15.f, WIDTH/10 +50);
 }
 
 void blockFramerate() {

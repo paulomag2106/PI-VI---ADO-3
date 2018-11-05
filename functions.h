@@ -37,6 +37,8 @@
 float xOffset;
 float yOffset;
 
+#define MAXSPD 3.f
+
 double oldx, oldy, mouseX, mouseY; // for orbiting
 double zoom; // for zooming camera
 
