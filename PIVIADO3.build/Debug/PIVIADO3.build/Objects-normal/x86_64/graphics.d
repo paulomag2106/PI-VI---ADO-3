@@ -1,7 +1,4 @@
-dependencies: /Users/danilomative/PI-VI---ADO-3/main.c \
-  /Users/danilomative/PI-VI---ADO-3/model.h \
-  /Users/danilomative/PI-VI---ADO-3/text.h \
-  /Users/danilomative/PI-VI---ADO-3/shapes.h \
+dependencies: /Users/danilomative/PI-VI---ADO-3/graphics.c \
   /Users/danilomative/PI-VI---ADO-3/graphics.h \
   /Users/danilomative/PI-VI---ADO-3/texGen.h \
   /Users/danilomative/PI-VI---ADO-3/functions.h \

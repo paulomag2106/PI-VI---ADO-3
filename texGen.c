@@ -38,7 +38,7 @@ void genVoronoiMap(uint32_t *tex, float variation) {
  			// 			 0xff << 24 |
  			// 			 (int)((points[nextClosest].weight) * 0xff) << 8;
 			tex[index] = 0xff << 24 |
- 						 (int)((points[nextClosest].weight) * 0xff) << 8;
+ 						 (int)(((1.f - points[nextClosest].weight)) * 0xff) << 8;
 
         }
     }

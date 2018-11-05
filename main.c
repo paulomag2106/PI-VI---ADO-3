@@ -1,13 +1,16 @@
-#include "text.h"
+#include "model.h"
 
 GLFWwindow *window;
 int width, height, prevWidth, prevHeight;
+
 
 int main() {
     srand((int)time(NULL));
     xOffset = yOffset = 0.f;
     zoom = WIDTH/10 + 50;
     v3 camerapos = {0,0,zoom};
+    
+    double timepassed = 0.f;
 
     width = WIDTH;
     height = HEIGHT;
@@ -102,7 +105,8 @@ int main() {
     object map = makeShapeObject(RECT, (v3){WIDTH/20, WIDTH/20, 0.f}, (v3){1.f,1.f,1.f}, NULL,
                                  GL_STATIC_DRAW, 0);
     updateTexture(&map, &tex);
-    object lobo = makeShapeObject(ELLIPSOID_2D, newV3(1, 1, 0.1), newV3(1, 0, 0), NULL, GL_DYNAMIC_DRAW, 2);
+    
+    createInitialEnvironment();
 
     //////////////////////////////////////////////////////////////////////////////
     //                                MAIN LOOP                                 //
@@ -110,7 +114,7 @@ int main() {
 
     while(!glfwGetKey(window, GLFW_KEY_ESCAPE) &&
     !glfwWindowShouldClose(window)) {
-
+        
         glfwGetWindowSize(window, &width, &height);
         glViewport(0,0, 2*width, 2*height);
 
@@ -118,6 +122,15 @@ int main() {
         double currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
+        
+        timepassed += deltaTime;
+        
+        if(timepassed > 2.f) {
+            
+            timepassed = 0.f;
+            timePasses();
+            
+        }
 
         // Zoom View Matrix
         camerapos.z = zoom;
@@ -131,7 +144,7 @@ int main() {
 
         // Draw Objects
         drawObject(&map);
-        drawObject(&lobo);
+        drawSites();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -142,7 +155,6 @@ int main() {
 
     // Free objects
     freeObject(&map);
-    freeObject(&lobo);
 
     // Free textobjects
 
