@@ -281,11 +281,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         xOffset = 0;
     }
     //
-    // if(key == GLFW_KEY_SPACE && action == GLFW_RELEASE) key_pressed[0] = true;
-    // if(key == GLFW_KEY_Z && action == GLFW_RELEASE) key_pressed[1] = true;
-    // if(key == GLFW_KEY_X && action == GLFW_RELEASE) key_pressed[2] = true;
-    // if(key == GLFW_KEY_C && action == GLFW_RELEASE) key_pressed[3] = true;
-    // if(key == GLFW_KEY_V && action == GLFW_RELEASE) key_pressed[4] = true;
+     if(key == GLFW_KEY_SPACE && action == GLFW_RELEASE) key_pressed[0] = true;
+     if(key == GLFW_KEY_Q && action == GLFW_RELEASE) key_pressed[1] = true;
+     if(key == GLFW_KEY_E && action == GLFW_RELEASE) key_pressed[2] = true;
+//     if(key == GLFW_KEY_C && action == GLFW_RELEASE) key_pressed[3] = true;
+//     if(key == GLFW_KEY_V && action == GLFW_RELEASE) key_pressed[4] = true;
 
 //    printf("%d\n", (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE));
 //

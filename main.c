@@ -11,6 +11,8 @@ int main() {
     v3 camerapos = {0,0,zoom};
     
     double timepassed = 0.f;
+    bool isPaused = true;
+    double tickToPassTime = 1.f;
 
     width = WIDTH;
     height = HEIGHT;
@@ -117,21 +119,39 @@ int main() {
         
         glfwGetWindowSize(window, &width, &height);
         glViewport(0,0, 2*width, 2*height);
+        
+        if(key_pressed[0]) {
+            key_pressed[0] = false;
+            timepassed = 0.f;
+            isPaused = !isPaused;
+        }
+        
+        if(key_pressed[1]) {
+            key_pressed[1] = false;
+            tickToPassTime = clamp(tickToPassTime - 0.25f, 0.01f, 3.f);
+        }
+        
+        if(key_pressed[2]) {
+            key_pressed[2] = false;
+            tickToPassTime = clamp(tickToPassTime + 0.25f, 0.01f, 3.f);
+        }
 
         // Get deltaTime and FPS
         double currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
         
-        timepassed += deltaTime;
-        
-        if(timepassed > 0.1f) {
+        if(!isPaused) {
+            timepassed += deltaTime;
             
-            timepassed = 0.f;
-            timePasses();
-            
+            if(timepassed > tickToPassTime) {
+                
+                timepassed = 0.f;
+                timePasses();
+                
+            }
         }
-
+        
         // Zoom View Matrix
         camerapos.x += xOffset;
         camerapos.y += yOffset;

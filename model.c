@@ -150,7 +150,7 @@ void timePasses() {
             
             else {
                 
-                float noHuntEffect = clamp(frand(0.02f), 0.f, 0.02f);
+                float noHuntEffect = clamp(frand(0.05f), 0.f, 0.05f);
                 
                 sites[i].prey.preyDensity += (p) * clamp(frand(0.05f), 0.01f, 0.05f);
                 sites[i].prey.preyDensity = clamp(sites[i].prey.preyDensity, 0.f, 1.f);
